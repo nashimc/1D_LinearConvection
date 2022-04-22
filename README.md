@@ -1,2 +1,2 @@
 # 1D_LinearConvection
- First step to "12 steps to Navier-Stokes" - Lorena Barba
+ First step of "12 steps to Navier-Stokes" - Lorena Barba
