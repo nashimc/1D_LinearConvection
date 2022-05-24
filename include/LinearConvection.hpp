@@ -28,15 +28,22 @@ public:
     std::vector<std::vector<double>> _uvArray;
     std::vector<std::vector<double>> _uvArray_new;
 
+    std::vector<std::vector<double>> _iterSolveSolution1D;
+    std::vector<std::vector<std::vector<double>>> _iterSolveSolution2D;
+
 public:
     LinearConvection(const double xDimension, const int xPoints, const double timeSteps, const double deltaTime);
     LinearConvection(const double xDimension, const int xPoints, const double yDimension, const int yPoints, const double timeSteps, const double deltaTime);
 
-    std::vector<double> linSpace(double start, double end, double num);
+    std::vector<double> linSpace(const double start, const double end, const double num);
     void init();
     void solve();
+    void iterSolve();
     void printSolution();
-    std::vector<double> getSolution();
+    std::vector<double> getSolution1D();
+    std::vector<std::vector<double>> getSolution2D();
+    std::vector<std::vector<double>> getIterSolution1D();
+    std::vector<std::vector<std::vector<double>>> getIterSolution2D();
 
     ~LinearConvection();
 };

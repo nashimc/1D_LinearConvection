@@ -88,9 +88,6 @@ void LinearConvection::init(){
     }
 } 
 
-
-
-
 void LinearConvection::solve(){
     init();
     if (_oneD == true){        
@@ -120,6 +117,36 @@ void LinearConvection::solve(){
     }
 }
 
+void LinearConvection::iterSolve(){
+    init();
+    if (_oneD == true){        
+        std::fill(std::begin(_uArray_new), std::end(_uArray_new), 1);
+        for (int t = 0; t < _timeSteps; ++t){
+            for (int i = 0; i < _xPoints; ++i)
+            {
+                _uArray_new[i] = _uArray[i] - _constant * (_deltaTime / _deltaX) * (_uArray[i] - _uArray[i-1]);
+            }
+            _iterSolveSolution1D.push_back(_uArray_new);
+            _uArray = _uArray_new;
+        }
+    }
+    if (_twoD == true){
+        for (int t = 0; t < _timeSteps; ++t){
+            for (int i = 1; i < _uvArray.size(); ++i){    
+                for (int j = 1; j < _uvArray[i].size(); ++j){
+                    _uvArray_new[i][j] = _uvArray[i][j] - _constant * (_deltaTime / _deltaX) * (_uvArray[i][j] - _uvArray[i-1][j])
+                                                        - _constant * (_deltaTime / _deltaY) * (_uvArray[i][j] - _uvArray[i][j-1]); 
+                    _uvArray_new[0][j-1] = 2;                       // ---top--
+                    _uvArray_new[i][0] = 2;                         // |  le
+                    _uvArray_new[_uvArray.size()-1][j] = 2;         // --bot---
+                    _uvArray_new[i-1][_uvArray[i].size()-1] = 2;    //    ri  |
+                }
+            }
+            _iterSolveSolution2D.push_back(_uvArray_new);
+            _uvArray = _uvArray_new;       
+        }
+    }
+}
 
 void LinearConvection::printSolution(){
     if (_oneD == true){
@@ -137,6 +164,18 @@ void LinearConvection::printSolution(){
     }
 }
 
-std::vector<double> LinearConvection::getSolution(){
-    return _uArray_new;
+std::vector<double> LinearConvection::getSolution1D(){
+    return _uArray;
+}
+
+std::vector<std::vector<double>> LinearConvection::getSolution2D(){
+    return _uvArray;
+}
+
+std::vector<std::vector<double>> LinearConvection::getIterSolution1D(){
+    return _iterSolveSolution1D;
+}
+    
+std::vector<std::vector<std::vector<double>>> LinearConvection::getIterSolution2D(){
+    return _iterSolveSolution2D;
 }

@@ -1,5 +1,4 @@
-
-#include<iostream>
+#include <iostream>
 #include "../include/pbPlots.hpp"
 #include "../include/supportLib.hpp"
 #include "../include/LinearConvection.hpp"
@@ -40,34 +39,53 @@ int main(){
     // }
 	// std::cout << "\n";
 
-    for (int i = 0; i < twoD._uvArray.size(); ++i){
-		for (auto it = twoD._uvArray[i].begin(); it != twoD._uvArray[i].end(); it++){	
-				std::cout << *it;
+    // for (int i = 0; i < twoD._uvArray.size(); ++i){
+	// 	for (auto it = twoD._uvArray[i].begin(); it != twoD._uvArray[i].end(); it++){	
+	// 			std::cout << *it;
+	// 	}
+	// 	std::cout << "\n";
+	// }
+
+    // // get 2d solution
+    // std::cout << "\n";
+    // std::cout << "init: \n";
+    // twoD.init();    
+    // for (int i = 0; i < twoD._uvArray.size(); ++i){
+	// 	for (auto it = twoD._uvArray[i].begin(); it != twoD._uvArray[i].end(); it++){	
+	// 			std::cout << *it;
+	// 	}
+	// 	std::cout << "\n";
+	// }
+    
+
+    std::cout << "\n";
+    std::cout << "iterSolve: \n";
+    twoD.iterSolve();
+    std::vector<std::vector<std::vector<double>>> iterSolveSolution2D = twoD.getIterSolution2D();
+
+    for (auto t = 0; t < iterSolveSolution2D.size(); ++t){
+		for (auto y = 0; y < iterSolveSolution2D[t].size(); ++y){
+			for (auto x = 0; x < iterSolveSolution2D[t][y].size(); ++x){
+				std::cout << iterSolveSolution2D[t][y][x]<< "\t";
+			}	
+			std::cout << "\n";
 		}
 		std::cout << "\n";
 	}
 
-    std::cout << "\n";
-    std::cout << "init: \n";
-    twoD.init();    
-    for (int i = 0; i < twoD._uvArray.size(); ++i){
-		for (auto it = twoD._uvArray[i].begin(); it != twoD._uvArray[i].end(); it++){	
-				std::cout << *it;
-		}
-		std::cout << "\n";
-	}
-    
-    std::cout << "\n";
-    std::cout << "solve: \n";
-    twoD.solve();
-    for (int i = 0; i < twoD._uvArray.size(); ++i){
-		for (auto it = twoD._uvArray[i].begin(); it != twoD._uvArray[i].end(); it++){	
-				std::cout << *it;
-		}
-		std::cout << "\n";
-	}
 
     
+
+
+
+
+
+
+
+
+
+
+
 
     // if (x.size() == y.size()){
     //     RGBABitmapImageReference *imageRef = CreateRGBABitmapImageReference();
@@ -79,6 +97,6 @@ int main(){
     //     delete errorMessage;
     // }
 
-    return 0;
+    // return 0;
 }
 
