@@ -29,7 +29,7 @@ int main(){
     double numberOfXPoints = 42;
     double yDimension = 2;
     double numberOfYPoints = 21;
-    int timeSteps = 10;   
+    int timeSteps = 3;   
     double deltaTime = 0.005;
 
     LinearConvection twoD(xDimension, numberOfXPoints, yDimension, numberOfYPoints, timeSteps, deltaTime);
@@ -39,14 +39,14 @@ int main(){
     // }
 	// std::cout << "\n";
 
-    // for (int i = 0; i < twoD._uvArray.size(); ++i){
-	// 	for (auto it = twoD._uvArray[i].begin(); it != twoD._uvArray[i].end(); it++){	
-	// 			std::cout << *it;
-	// 	}
-	// 	std::cout << "\n";
-	// }
+    for (int i = 0; i < twoD._uvArray.size(); ++i){
+		for (auto it = twoD._uvArray[i].begin(); it != twoD._uvArray[i].end(); it++){	
+				std::cout << *it;
+		}
+		std::cout << "\n";
+	}
 
-    // // get 2d solution
+    // // get 2d
     // std::cout << "\n";
     // std::cout << "init: \n";
     // twoD.init();    
@@ -57,21 +57,46 @@ int main(){
 	// 	std::cout << "\n";
 	// }
     
+    // std::cout << "\n";
+    // std::cout << "solve: \n";
+    // twoD.solve();
+    // for (int i = 0; i < twoD._uvArray.size(); ++i){
+	// 	for (auto it = twoD._uvArray[i].begin(); it != twoD._uvArray[i].end(); it++){	
+	// 			std::cout << *it;
+	// 	}
+	// 	std::cout << "\n";
+	// }
 
     std::cout << "\n";
     std::cout << "iterSolve: \n";
     twoD.iterSolve();
-    std::vector<std::vector<std::vector<double>>> iterSolveSolution2D = twoD.getIterSolution2D();
+    std::vector<std::vector<std::vector<double>>> iterSolution2D = twoD.getIterSolution2D();
 
-    for (auto t = 0; t < iterSolveSolution2D.size(); ++t){
-		for (auto y = 0; y < iterSolveSolution2D[t].size(); ++y){
-			for (auto x = 0; x < iterSolveSolution2D[t][y].size(); ++x){
-				std::cout << iterSolveSolution2D[t][y][x]<< "\t";
+    std::ofstream file;
+    file.open("results.csv");
+
+    for (auto t = 0; t < iterSolution2D.size(); ++t){
+        file << t << ",";
+		for (auto y = 0; y < iterSolution2D[t].size(); ++y){
+			for (auto x = 0; x < iterSolution2D[t][y].size(); ++x){
+				file << iterSolution2D[t][y][x] << ",";
 			}	
-			std::cout << "\n";
+			file << "\n" << ",";
 		}
-		std::cout << "\n";
+		file << "\n";
 	}
+
+    // // get 2d iter print
+    // for (auto t = 0; t < iterSolution2D.size(); ++t){
+    //     std::cout << t << ",\t\t";
+	// 	for (auto y = 0; y < iterSolution2D[t].size(); ++y){
+	// 		for (auto x = 0; x < iterSolution2D[t][y].size(); ++x){
+	// 			std::cout << iterSolution2D[t][y][x] << ",\t\t";
+	// 		}	
+	// 		std::cout << "\n";
+	// 	}
+	// 	std::cout << "\n";
+	// }
 
 
     

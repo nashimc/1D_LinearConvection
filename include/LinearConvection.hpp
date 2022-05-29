@@ -7,6 +7,7 @@ class LinearConvection{
 public:
     bool _oneD = false;
     bool _twoD = false;
+    bool _solveIter;
 
     const int _constant = 1;
     double _xDimension;
@@ -28,8 +29,8 @@ public:
     std::vector<std::vector<double>> _uvArray;
     std::vector<std::vector<double>> _uvArray_new;
 
-    std::vector<std::vector<double>> _iterSolveSolution1D;
-    std::vector<std::vector<std::vector<double>>> _iterSolveSolution2D;
+    std::vector<std::vector<double>> _iterSolution1D;
+    std::vector<std::vector<std::vector<double>>> _iterSolution2D;
 
 public:
     LinearConvection(const double xDimension, const int xPoints, const double timeSteps, const double deltaTime);
@@ -37,6 +38,7 @@ public:
 
     std::vector<double> linSpace(const double start, const double end, const double num);
     void init();
+    void run();
     void solve();
     void iterSolve();
     void printSolution();
