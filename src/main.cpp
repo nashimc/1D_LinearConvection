@@ -25,11 +25,11 @@ int main(){
     // std::vector<double> y = oneD.getSolution();
 
 
-    double xDimension = 2;
-    double numberOfXPoints = 21;
-    double yDimension = 2;
-    double numberOfYPoints = 21;
-    int timeSteps = 3;   
+    double xDimension = 5;
+    double numberOfXPoints = 101;
+    double yDimension = 5;
+    double numberOfYPoints = 101;
+    int timeSteps = 100;   
     double deltaTime = 0.005;
 
     LinearConvection twoD(xDimension, numberOfXPoints, yDimension, numberOfYPoints, timeSteps, deltaTime);
