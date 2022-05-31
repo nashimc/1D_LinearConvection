@@ -35,7 +35,7 @@ public:
     
     void init();
     std::vector<double> linSpace(const double start, const double end, const double num);
-    void initBoundaryConditions();
+    void initConditions();
     void Run();
     void Solve();
     void printSolution();

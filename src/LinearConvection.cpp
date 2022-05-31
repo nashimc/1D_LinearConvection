@@ -69,7 +69,7 @@ std::vector<double> LinearConvection::linSpace(const double start, const double 
     return linSpaceVec;
 }
 
-void LinearConvection::initBoundaryConditions(){
+void LinearConvection::initConditions(){
     if (_oneD == true){
         for (int i = 0; i < _xArray.size(); ++i){    
             if (_xArray[i] >= 0.5 && _xArray[i] <= 1.0){
@@ -82,7 +82,7 @@ void LinearConvection::initBoundaryConditions(){
             for (int j = 0; j < _uvArray[i].size(); ++j){
                 if (_xArray[i] > 0.5 && _xArray[i] < 1){
                     if (_yArray[j] > 0.5 && _yArray[j] < 1){
-                        _uvArray[i][j] = 2;
+                        _uvArray[i][j] = 2;                         // initial velocity
                     }
                 }
             }    
@@ -107,6 +107,7 @@ void LinearConvection::Run(){
                 for (int j = 1; j < _uvArray[i].size(); ++j){
                     _uvArray_new[i][j] = _uvArray[i][j] - _constant * (_deltaTime / _deltaX) * (_uvArray[i][j] - _uvArray[i-1][j])
                                                         - _constant * (_deltaTime / _deltaY) * (_uvArray[i][j] - _uvArray[i][j-1]); 
+                    // Boundary Conditions
                     _uvArray_new[0][j-1] = 1;                       // ---top--
                     _uvArray_new[i][0] = 1;                         // |  le
                     _uvArray_new[_uvArray.size()-1][j] = 1;         // --bot---
@@ -121,7 +122,7 @@ void LinearConvection::Run(){
 }
 
 void LinearConvection::Solve(){
-    initBoundaryConditions();
+    initConditions();
     Run();
 }
 
