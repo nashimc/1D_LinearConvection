@@ -25,8 +25,8 @@ int main(){
     // std::vector<double> y = oneD.getSolution();
 
 
-    double xDimension = 4;
-    double numberOfXPoints = 42;
+    double xDimension = 2;
+    double numberOfXPoints = 21;
     double yDimension = 2;
     double numberOfYPoints = 21;
     int timeSteps = 3;   
@@ -34,11 +34,10 @@ int main(){
 
     LinearConvection twoD(xDimension, numberOfXPoints, yDimension, numberOfYPoints, timeSteps, deltaTime);
 
-    // for (auto it = twoD._xArray.begin(); it != twoD._xArray.end(); it++){
-    //     std::cout << *it << " ";
-    // }
-	// std::cout << "\n";
-
+    std::cout << "\n";
+    std::cout << "\n";
+    std::cout << "solve: \n";
+    twoD.Solve();
     for (int i = 0; i < twoD._uvArray.size(); ++i){
 		for (auto it = twoD._uvArray[i].begin(); it != twoD._uvArray[i].end(); it++){	
 				std::cout << *it;
@@ -46,35 +45,9 @@ int main(){
 		std::cout << "\n";
 	}
 
-    // // get 2d
-    // std::cout << "\n";
-    // std::cout << "init: \n";
-    // twoD.init();    
-    // for (int i = 0; i < twoD._uvArray.size(); ++i){
-	// 	for (auto it = twoD._uvArray[i].begin(); it != twoD._uvArray[i].end(); it++){	
-	// 			std::cout << *it;
-	// 	}
-	// 	std::cout << "\n";
-	// }
-    
-    // std::cout << "\n";
-    // std::cout << "solve: \n";
-    // twoD.solve();
-    // for (int i = 0; i < twoD._uvArray.size(); ++i){
-	// 	for (auto it = twoD._uvArray[i].begin(); it != twoD._uvArray[i].end(); it++){	
-	// 			std::cout << *it;
-	// 	}
-	// 	std::cout << "\n";
-	// }
-
-    std::cout << "\n";
-    std::cout << "iterSolve: \n";
-    twoD.iterSolve();
     std::vector<std::vector<std::vector<double>>> iterSolution2D = twoD.getIterSolution2D();
-
     std::ofstream file;
     file.open("results.csv");
-
     for (auto t = 0; t < iterSolution2D.size(); ++t){
         file << t << ",";
 		for (auto y = 0; y < iterSolution2D[t].size(); ++y){
@@ -85,6 +58,25 @@ int main(){
 		}
 		file << "\n";
 	}
+
+
+
+
+
+
+
+    // // 1D Check
+    // for (auto it = oneD._xArray.begin(); it != oneD._xArray.end(); it++){
+    //     std::cout << *it << " ";
+    // }
+	// std::cout << "\n";
+    // // 2D Check
+    // for (int i = 0; i < twoD._uvArray.size(); ++i){
+	// 	for (auto it = twoD._uvArray[i].begin(); it != twoD._uvArray[i].end(); it++){	
+	// 			std::cout << *it;
+	// 	}
+	// 	std::cout << "\n";
+	// }
 
     // // get 2d iter print
     // for (auto t = 0; t < iterSolution2D.size(); ++t){
@@ -97,20 +89,6 @@ int main(){
 	// 	}
 	// 	std::cout << "\n";
 	// }
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
 
     // if (x.size() == y.size()){
     //     RGBABitmapImageReference *imageRef = CreateRGBABitmapImageReference();

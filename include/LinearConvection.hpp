@@ -7,7 +7,6 @@ class LinearConvection{
 public:
     bool _oneD = false;
     bool _twoD = false;
-    bool _solveIter;
 
     const int _constant = 1;
     double _xDimension;
@@ -35,13 +34,14 @@ public:
 public:
     LinearConvection(const double xDimension, const int xPoints, const double timeSteps, const double deltaTime);
     LinearConvection(const double xDimension, const int xPoints, const double yDimension, const int yPoints, const double timeSteps, const double deltaTime);
-
-    std::vector<double> linSpace(const double start, const double end, const double num);
+    
     void init();
-    void run();
-    void solve();
-    void iterSolve();
+    std::vector<double> linSpace(const double start, const double end, const double num);
+    void initBoundaryConditions();
+    void Run();
+    void Solve();
     void printSolution();
+
     std::vector<double> getSolution1D();
     std::vector<std::vector<double>> getSolution2D();
     std::vector<std::vector<double>> getIterSolution1D();
