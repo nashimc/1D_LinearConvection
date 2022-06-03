@@ -103,11 +103,11 @@ void LinearConvection::Run(){
     }
     if (_twoD == true){
         for (int t = 0; t < _timeSteps; ++t){
-            for (int i = 1; i < _uvArray.size(); ++i){    
+            for (int i = 1; i < _uvArray.size(); ++i){   
                 for (int j = 1; j < _uvArray[i].size(); ++j){
                     _uvArray_new[i][j] = _uvArray[i][j] - _constant * (_deltaTime / _deltaX) * (_uvArray[i][j] - _uvArray[i-1][j])
                                                         - _constant * (_deltaTime / _deltaY) * (_uvArray[i][j] - _uvArray[i][j-1]); 
-                    // Boundary Conditions
+                    // Boundary Conditions - fills in BC with shift
                     _uvArray_new[0][j-1] = 1;                       // ---top--
                     _uvArray_new[i][0] = 1;                         // |  le
                     _uvArray_new[_uvArray.size()-1][j] = 1;         // --bot---
@@ -117,6 +117,27 @@ void LinearConvection::Run(){
             _iterSolution2D.push_back(_uvArray_new);                // save iterative solution for all timesteps
             _uvArray = _uvArray_new;       
         }
+
+        // // alternative way to loop through matrix, loops through inner points, then applies boundary conditions - 4 sides + 4 corners
+        // for (int t = 0; t < _timeSteps; ++t){
+        //     for (int i = 1; i < _uvArray.size() - 1; ++i){
+        //         for (int j = 1; j < _uvArray[i].size() - 1; ++j){
+        //             _uvArray_new[i][j] = _uvArray[i][j] - _constant * (_deltaTime / _deltaX) * (_uvArray[i][j] - _uvArray[i-1][j])
+        //                                                 - _constant * (_deltaTime / _deltaY) * (_uvArray[i][j] - _uvArray[i][j-1]);
+        //             // Boundary Conditions
+        //             _uvArray_new[0][j] = 1;                                     // ---top--
+        //             _uvArray_new[i][0] = 1;                                     // |  le
+        //             _uvArray_new[_uvArray.size()-1][j] = 1;                     // --bot---
+        //             _uvArray_new[i][_uvArray[i].size()-1] = 1;                  //    ri  |
+        //             _uvArray_new[0][0] = 1;                                     // top le corner
+        //             _uvArray_new[_uvArray.size()-1][0] = 1;                     // bot le corner
+        //             _uvArray_new[_uvArray.size()-1][_uvArray[i].size()-1] = 1;  // bot ri corner
+        //             _uvArray_new[0][_uvArray[i].size()-1] = 1;                  // top ri corner
+        //         }
+        //     }
+        //     _iterSolution2D.push_back(_uvArray_new);                // save iterative solution for all timesteps
+        //     _uvArray = _uvArray_new;       
+        // }
     }
 
 }
@@ -135,7 +156,7 @@ void LinearConvection::printSolution(){
     if (_twoD == true){
         for (int i = 0; i < _uvArray.size(); ++i){
             for (auto it = _uvArray[i].begin(); it != _uvArray[i].end(); it++){	
-                    std::cout << *it;
+                std::cout << *it;
 		    }
 		    std::cout << "\n";
 	    }
