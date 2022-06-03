@@ -9,7 +9,7 @@ public:
     bool _oneD = false;
     bool _twoD = false;
 
-    double _nu = 0.3;
+    float _nu;
     double _xDimension;
     int _xPoints;
     double _deltaX = _xDimension / (_xPoints - 1);
@@ -31,8 +31,8 @@ public:
     std::vector<std::vector<std::vector<double>>> _iterSolution2D;
 
 public:
-    Diffusion(const double xDimension, const int xPoints, const double timeSteps, const double deltaTime, const double nu);
-    Diffusion(const double xDimension, const int xPoints, const double yDimension, const int yPoints, const double timeSteps, const double deltaTime, const double nu);
+    Diffusion(const double xDimension, const int xPoints, const double timeSteps, const double deltaTime, const float nu);
+    Diffusion(const double xDimension, const int xPoints, const double yDimension, const int yPoints, const double timeSteps, const double deltaTime, const float nu);
     
     void init();
     std::vector<double> linSpace(const double start, const double end, const double num);

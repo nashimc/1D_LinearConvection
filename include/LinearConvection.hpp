@@ -2,13 +2,14 @@
 #include <vector>
 #include <numeric>
 #include <iostream>
+#include "ArrayType.hpp"
 
 class LinearConvection{
 public:
     bool _oneD = false;
     bool _twoD = false;
 
-    const int _constant = 1;
+    float _constant;
     double _xDimension;
     int _xPoints;
     double _deltaX = _xDimension / (_xPoints - 1);
@@ -29,9 +30,11 @@ public:
     std::vector<std::vector<double>> _iterSolution1D;
     std::vector<std::vector<std::vector<double>>> _iterSolution2D;
 
+    // ArrayType _solutionArray;
+
 public:
-    LinearConvection(const double xDimension, const int xPoints, const double timeSteps, const double deltaTime);
-    LinearConvection(const double xDimension, const int xPoints, const double yDimension, const int yPoints, const double timeSteps, const double deltaTime);
+    LinearConvection(const double xDimension, const int xPoints, const double timeSteps, const double deltaTime, float constant);
+    LinearConvection(const double xDimension, const int xPoints, const double yDimension, const int yPoints, const double timeSteps, const double deltaTime,  float constant);
     
     void init();
     std::vector<double> linSpace(const double start, const double end, const double num);
@@ -44,6 +47,9 @@ public:
     std::vector<std::vector<double>> getSolution2D();
     std::vector<std::vector<double>> getIterSolution1D();
     std::vector<std::vector<std::vector<double>>> getIterSolution2D();
+
+    // ArrayType getSolution();
+    // ArrayType getIterSolution();
 
     ~LinearConvection();
 };

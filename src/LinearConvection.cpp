@@ -1,23 +1,25 @@
 #include "../include/LinearConvection.hpp"
 
 
-LinearConvection::LinearConvection(const double xDimension, const int xPoints, const double timeSteps, const double deltaTime):
+LinearConvection::LinearConvection(const double xDimension, const int xPoints, const double timeSteps, const double deltaTime, float constant):
 _xDimension{xDimension},
 _xPoints{xPoints},
 _timeSteps{timeSteps},
-_deltaTime{deltaTime}
+_deltaTime{deltaTime},
+_constant{constant}
 {
-    _oneD = true;
+    _oneD = true;    
     init();
 }
 
-LinearConvection::LinearConvection(const double xDimension, const int xPoints, const double yDimension, const int yPoints, const double timeSteps, const double deltaTime):
+LinearConvection::LinearConvection(const double xDimension, const int xPoints, const double yDimension, const int yPoints, const double timeSteps, const double deltaTime, float constant):
 _xDimension{xDimension},
 _xPoints{xPoints},
 _yDimension{yDimension},
 _yPoints{yPoints},
 _timeSteps{timeSteps},
-_deltaTime{deltaTime}
+_deltaTime{deltaTime},
+_constant{constant}
 {
     _twoD = true;
     init();      
@@ -118,7 +120,7 @@ void LinearConvection::Run(){
             _uvArray = _uvArray_new;       
         }
 
-        // // alternative way to loop through matrix, loops through inner points, then applies boundary conditions - 4 sides + 4 corners
+        // // alternative way to loop through matrix, loops through inner points, then applies BC - 4 sides + 4 corners
         // for (int t = 0; t < _timeSteps; ++t){
         //     for (int i = 1; i < _uvArray.size() - 1; ++i){
         //         for (int j = 1; j < _uvArray[i].size() - 1; ++j){
@@ -163,6 +165,7 @@ void LinearConvection::printSolution(){
     }
 }
 
+
 std::vector<double> LinearConvection::getSolution1D(){return _uArray;}
 
 std::vector<std::vector<double>> LinearConvection::getSolution2D(){return _uvArray;}
@@ -171,3 +174,26 @@ std::vector<std::vector<double>> LinearConvection::getIterSolution1D(){return _i
     
 std::vector<std::vector<std::vector<double>>> LinearConvection::getIterSolution2D(){return _iterSolution2D;}
 
+// ArrayType LinearConvection::getSolution(){
+//     if (_oneD == true){
+//         _solutionArray.oneD = _uArray;
+//         return _solutionArray;
+//     }
+//     if (_twoD == true){
+//         _solutionArray.twoD = _uvArray;
+//         return _solutionArray;
+//     }
+//     else{};
+// }
+
+// ArrayType LinearConvection::getIterSolution(){
+//     if (_oneD == true){
+//         _solutionArray.twoD = _iterSolution1D;
+//         return _solutionArray;
+//     }
+//     if (_twoD == true){
+//         _solutionArray.threeD = _iterSolution2D;
+//         return _solutionArray;
+//     }
+//     else{};
+// }

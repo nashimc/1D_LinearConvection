@@ -1,7 +1,7 @@
 #include "../include/Diffusion.hpp"
 
 
-Diffusion::Diffusion(const double xDimension, const int xPoints, const double timeSteps, const double deltaTime, const double nu):
+Diffusion::Diffusion(const double xDimension, const int xPoints, const double timeSteps, const double deltaTime, const float nu):
 _xDimension{xDimension},
 _xPoints{xPoints},
 _timeSteps{timeSteps},
@@ -12,7 +12,7 @@ _nu{nu}
     init();
 }
 
-Diffusion::Diffusion(const double xDimension, const int xPoints, const double yDimension, const int yPoints, const double timeSteps, const double deltaTime, const double nu):
+Diffusion::Diffusion(const double xDimension, const int xPoints, const double yDimension, const int yPoints, const double timeSteps, const double deltaTime, const float nu):
 _xDimension{xDimension},
 _xPoints{xPoints},
 _yDimension{yDimension},
