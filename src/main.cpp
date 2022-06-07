@@ -38,26 +38,13 @@ int main(){
     LinearConvection twoD_LC(xDimension, numberOfXPoints, yDimension, numberOfYPoints, timeSteps, deltaTime, lc_constant);
     Diffusion twoD_Diff(xDimension, numberOfXPoints, yDimension, numberOfYPoints, timeSteps, deltaTime, diff_nu);
 
-    std::cout << "\n";
-    std::cout << "\n";
-    std::cout << "Print Result: \n";
+    std::cout << "LinConv Result: \n";
     twoD_LC.Solve();
-    for (int i = 0; i < twoD_LC._uvArray.size(); ++i){
-		for (auto it = twoD_LC._uvArray[i].begin(); it != twoD_LC._uvArray[i].end(); it++){	
-				std::cout << *it;
-		}
-		std::cout << "\n";
-	}
-    std::cout << "\n";
-    std::cout << "\n";
-    std::cout << "Print Result: \n";
+    twoD_LC.printSolution();
+
+    std::cout << "Diff Result: \n";
     twoD_Diff.Solve();
-    for (int i = 0; i < twoD_Diff._uvArray.size(); ++i){
-		for (auto it = twoD_Diff._uvArray[i].begin(); it != twoD_Diff._uvArray[i].end(); it++){	
-				std::cout << *it;
-		}
-		std::cout << "\n";
-	}
+    twoD_Diff.printSolution();
 
     std::vector<std::vector<std::vector<double>>> iterSolution2D_LC = twoD_LC.getIterSolution2D();
     writeMatrix("LinConvResults.csv", iterSolution2D_LC);
