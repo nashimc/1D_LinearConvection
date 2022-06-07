@@ -1,4 +1,6 @@
 #include <iostream>
+#include <vector>
+#include <string>
 #include "../include/pbPlots.hpp"
 #include "../include/supportLib.hpp"
 #include "../include/ArrayType.hpp"
@@ -6,24 +8,29 @@
 #include "../include/Diffusion.hpp"
 
 
+void writeMatrix(std::string const fileName, std::vector<std::vector<std::vector<double>>> &matrix){
+    std::ofstream file;   
+    file.open(fileName);
+    for (auto t = 0; t < matrix.size(); ++t){
+        file << t << ",";
+		for (auto y = 0; y < matrix[t].size(); ++y){
+			for (auto x = 0; x < matrix[t][y].size(); ++x){
+				file << matrix[t][y][x] << ",";
+			}	
+			file << "\n" << ",";
+		}
+		file << "\n";
+	}
+}
+
+
 int main(){
-
-    // double xDimension = 2;
-    // double numberOfPoints = 21;
-    // int timeSteps = 50;   
-    // double deltaTime = 0.01;
-
-    // LinearConvection oneD(xDimension, numberOfPoints, timeSteps, deltaTime);
-    // oneD.solve();
-
-
-
 
     double xDimension = 5;
     double numberOfXPoints = 21;
     double yDimension = 5;
     double numberOfYPoints = 21;
-    int timeSteps = 2;   
+    int timeSteps = 10;   
     double deltaTime = 0.005;
     float lc_constant = 1;
     float diff_nu = 0.3;
@@ -33,7 +40,7 @@ int main(){
 
     std::cout << "\n";
     std::cout << "\n";
-    std::cout << "LC solve: \n";
+    std::cout << "Print Result: \n";
     twoD_LC.Solve();
     for (int i = 0; i < twoD_LC._uvArray.size(); ++i){
 		for (auto it = twoD_LC._uvArray[i].begin(); it != twoD_LC._uvArray[i].end(); it++){	
@@ -41,68 +48,28 @@ int main(){
 		}
 		std::cout << "\n";
 	}
+    std::cout << "\n";
+    std::cout << "\n";
+    std::cout << "Print Result: \n";
+    twoD_Diff.Solve();
+    for (int i = 0; i < twoD_Diff._uvArray.size(); ++i){
+		for (auto it = twoD_Diff._uvArray[i].begin(); it != twoD_Diff._uvArray[i].end(); it++){	
+				std::cout << *it;
+		}
+		std::cout << "\n";
+	}
 
     std::vector<std::vector<std::vector<double>>> iterSolution2D_LC = twoD_LC.getIterSolution2D();
-    std::ofstream file_LC;
-    file_LC.open("LinConvResults.csv");
-    for (auto t = 0; t < iterSolution2D_LC.size(); ++t){
-        file_LC << t << ",";
-		for (auto y = 0; y < iterSolution2D_LC[t].size(); ++y){
-			for (auto x = 0; x < iterSolution2D_LC[t][y].size(); ++x){
-				file_LC << iterSolution2D_LC[t][y][x] << ",";
-			}	
-			file_LC << "\n" << ",";
-		}
-		file_LC << "\n";
-	}
-
+    writeMatrix("LinConvResults.csv", iterSolution2D_LC);
 
     std::vector<std::vector<std::vector<double>>> iterSolution2D_Diff = twoD_Diff.getIterSolution2D();
-    std::ofstream file;
-    file.open("DiffResults.csv");
-    for (auto t = 0; t < iterSolution2D_Diff.size(); ++t){
-        file << t << ",";
-		for (auto y = 0; y < iterSolution2D_Diff[t].size(); ++y){
-			for (auto x = 0; x < iterSolution2D_Diff[t][y].size(); ++x){
-				file << iterSolution2D_Diff[t][y][x] << ",";
-			}	
-			file << "\n" << ",";
-		}
-		file << "\n";
-	}
+    writeMatrix("DiffResults.csv", iterSolution2D_Diff); 
 
 
 
 
 
-    // // using ArrayType
-    // ArrayType LC_SOLUTION_ARRAY = twoD_LC.getIterSolution();
-    // std::ofstream file_LC;
-    // file_LC.open("LinConvResults.csv");
-    // for (auto t = 0; t < LC_SOLUTION_ARRAY.threeD.size(); ++t){
-    //     file_LC << t << ",";
-	// 	for (auto y = 0; y < LC_SOLUTION_ARRAY.threeD[t].size(); ++y){
-	// 		for (auto x = 0; x < LC_SOLUTION_ARRAY.threeD[t][y].size(); ++x){
-	// 			file_LC << LC_SOLUTION_ARRAY.threeD[t][y][x] << ",";
-	// 		}	
-	// 		file_LC << "\n" << ",";
-	// 	}
-	// 	file_LC << "\n";
-	// }
 
-
-
-
-    // std::cout << "\n";
-    // std::cout << "\n";
-    // std::cout << "LC solve: \n";
-    // twoD.Solve();
-    // for (int i = 0; i < twoD._uvArray.size(); ++i){
-	// 	for (auto it = twoD._uvArray[i].begin(); it != twoD._uvArray[i].end(); it++){	
-	// 			std::cout << *it;
-	// 	}
-	// 	std::cout << "\n";
-	// }
 
 
     // // 1D Check
