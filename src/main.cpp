@@ -8,7 +8,7 @@
 #include "../include/Diffusion.hpp"
 
 
-void writeMatrix(std::string const fileName, std::vector<std::vector<std::vector<double>>> &matrix){
+void writeToFile(std::string const fileName, std::vector<std::vector<std::vector<double>>> &matrix){
     std::ofstream file;   
     file.open(fileName);
     for (auto t = 0; t < matrix.size(); ++t){
@@ -42,15 +42,17 @@ int main(){
     twoD_LC.Solve();
     twoD_LC.printSolution();
 
+    std::cout << "\n";
+
     std::cout << "Diff Result: \n";
     twoD_Diff.Solve();
     twoD_Diff.printSolution();
 
     std::vector<std::vector<std::vector<double>>> iterSolution2D_LC = twoD_LC.getIterSolution2D();
-    writeMatrix("LinConvResults.csv", iterSolution2D_LC);
+    writeToFile("LinConvResults.csv", iterSolution2D_LC);
 
     std::vector<std::vector<std::vector<double>>> iterSolution2D_Diff = twoD_Diff.getIterSolution2D();
-    writeMatrix("DiffResults.csv", iterSolution2D_Diff); 
+    writeToFile("DiffResults.csv", iterSolution2D_Diff); 
 
 
 

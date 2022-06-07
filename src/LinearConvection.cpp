@@ -1,6 +1,5 @@
 #include "../include/LinearConvection.hpp"
 
-
 LinearConvection::LinearConvection(const double xDimension, const int xPoints, const double timeSteps, const double deltaTime, float constant):
 _xDimension{xDimension},
 _xPoints{xPoints},
@@ -32,7 +31,7 @@ LinearConvection::~LinearConvection(){
 // initialise arrays
 void LinearConvection::init(){                                      
     if (_oneD == true){
-        _xArray = linSpace(0,_xDimension, _xPoints);
+        _xArray = _linSpaced.getLinSpace(0,_xDimension, _xPoints);
 
         _uArray.resize(_xPoints);                                   // resize arrays
         _uArray_new.resize(_xPoints);                                 
@@ -42,8 +41,8 @@ void LinearConvection::init(){
         _uArray[_xPoints-1] = 0;        
     }
     if (_twoD == true){
-        _xArray = linSpace(0, _xDimension, _xPoints);
-        _yArray = linSpace(0, _yDimension, _yPoints);
+        _xArray = _linSpaced.getLinSpace(0, _xDimension, _xPoints);
+        _yArray = _linSpaced.getLinSpace(0, _yDimension, _yPoints);
 
         _uArray.resize(_xPoints);                                   // resize arrays
         std::fill(std::begin(_uArray), std::end(_uArray), 1);       // fill u with 1
@@ -97,7 +96,8 @@ void LinearConvection::Run(){
         for (int t = 0; t < _timeSteps; ++t){
             for (int i = 0; i < _xPoints; ++i)
             {
-                _uArray_new[i] = _uArray[i] - _constant * (_deltaTime / _deltaX) * (_uArray[i] - _uArray[i-1]);
+                _uArray_new[i] = _uArray[i] - _constant 
+                                            * (_deltaTime / _deltaX) * (_uArray[i] - _uArray[i-1]);
             }
             _iterSolution1D.push_back(_uArray_new);                 // save iterative solution for all timesteps
             _uArray = _uArray_new;
@@ -107,8 +107,10 @@ void LinearConvection::Run(){
         for (int t = 0; t < _timeSteps; ++t){
             for (int i = 1; i < _uvArray.size(); ++i){   
                 for (int j = 1; j < _uvArray[i].size(); ++j){
-                    _uvArray_new[i][j] = _uvArray[i][j] - _constant * (_deltaTime / _deltaX) * (_uvArray[i][j] - _uvArray[i-1][j])
-                                                        - _constant * (_deltaTime / _deltaY) * (_uvArray[i][j] - _uvArray[i][j-1]); 
+                    _uvArray_new[i][j] = _uvArray[i][j] - _constant 
+                                                        * (_deltaTime / _deltaX) * (_uvArray[i][j] - _uvArray[i-1][j])
+                                                        - _constant 
+                                                        * (_deltaTime / _deltaY) * (_uvArray[i][j] - _uvArray[i][j-1]); 
                     // Boundary Conditions - fills in BC with shift
                     _uvArray_new[0][j-1] = 1;                       // ---top--
                     _uvArray_new[i][0] = 1;                         // |  le
@@ -174,26 +176,4 @@ std::vector<std::vector<double>> LinearConvection::getIterSolution1D(){return _i
     
 std::vector<std::vector<std::vector<double>>> LinearConvection::getIterSolution2D(){return _iterSolution2D;}
 
-// ArrayType LinearConvection::getSolution(){
-//     if (_oneD == true){
-//         _solutionArray.oneD = _uArray;
-//         return _solutionArray;
-//     }
-//     if (_twoD == true){
-//         _solutionArray.twoD = _uvArray;
-//         return _solutionArray;
-//     }
-//     else{};
-// }
 
-// ArrayType LinearConvection::getIterSolution(){
-//     if (_oneD == true){
-//         _solutionArray.twoD = _iterSolution1D;
-//         return _solutionArray;
-//     }
-//     if (_twoD == true){
-//         _solutionArray.threeD = _iterSolution2D;
-//         return _solutionArray;
-//     }
-//     else{};
-// }

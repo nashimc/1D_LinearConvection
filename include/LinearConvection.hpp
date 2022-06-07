@@ -3,6 +3,7 @@
 #include <numeric>
 #include <iostream>
 #include "ArrayType.hpp"
+#include "LinSpace.hpp"
 
 class LinearConvection{
 public:
@@ -10,11 +11,9 @@ public:
     bool _twoD = false;
 
     float _constant;
-    double _xDimension;
-    int _xPoints;
+    double _xDimension, _yDimension;
+    int _xPoints, _yPoints;
     double _deltaX = _xDimension / (_xPoints - 1);
-    double _yDimension;
-    int _yPoints;
     double _deltaY = _yDimension / (_yPoints - 1);
 
     double _timeSteps;
@@ -29,6 +28,8 @@ public:
 
     std::vector<std::vector<double>> _iterSolution1D;
     std::vector<std::vector<std::vector<double>>> _iterSolution2D;
+
+    LinSpace _linSpaced;
 
     // ArrayType _solutionArray;
 
@@ -47,9 +48,6 @@ public:
     std::vector<std::vector<double>> getSolution2D();
     std::vector<std::vector<double>> getIterSolution1D();
     std::vector<std::vector<std::vector<double>>> getIterSolution2D();
-
-    // ArrayType getSolution();
-    // ArrayType getIterSolution();
 
     ~LinearConvection();
 };

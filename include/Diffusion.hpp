@@ -3,6 +3,7 @@
 #include <numeric>
 #include <cmath>
 #include <iostream>
+#include "LinSpace.hpp"
 
 class Diffusion{
 public:
@@ -30,12 +31,13 @@ public:
     std::vector<std::vector<double>> _iterSolution1D;
     std::vector<std::vector<std::vector<double>>> _iterSolution2D;
 
+    LinSpace _linSpaced;
+
 public:
     Diffusion(const double xDimension, const int xPoints, const double timeSteps, const double deltaTime, const float nu);
     Diffusion(const double xDimension, const int xPoints, const double yDimension, const int yPoints, const double timeSteps, const double deltaTime, const float nu);
     
     void init();
-    std::vector<double> linSpace(const double start, const double end, const double num);
     void initConditions();
     void Run();
     void Solve();

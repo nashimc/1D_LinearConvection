@@ -32,7 +32,7 @@ Diffusion::~Diffusion(){
 // initialise arrays
 void Diffusion::init(){                                      
     if (_oneD == true){
-        _xArray = linSpace(0,_xDimension, _xPoints);
+        _xArray = _linSpaced.getLinSpace(0,_xDimension, _xPoints);
 
         _uArray.resize(_xPoints);                                   // resize arrays
         _uArray_new.resize(_xPoints);                                 
@@ -42,8 +42,8 @@ void Diffusion::init(){
         _uArray[_xPoints-1] = 0;        
     }
     if (_twoD == true){
-        _xArray = linSpace(0, _xDimension, _xPoints);
-        _yArray = linSpace(0, _yDimension, _yPoints);
+        _xArray = _linSpaced.getLinSpace(0, _xDimension, _xPoints);
+        _yArray = _linSpaced.getLinSpace(0, _yDimension, _yPoints);
 
         _uArray.resize(_xPoints);                                   // resize arrays
         std::fill(std::begin(_uArray), std::end(_uArray), 1);       // fill u with 1
@@ -52,23 +52,6 @@ void Diffusion::init(){
         }
         _uvArray_new = _uvArray;                                    // copy to new
     }
-}
-
-std::vector<double> Diffusion::linSpace(const double start, const double end, const double num){
-    std::vector<double> linSpaceVec;
-    double delta = (end - start) / (num - 1);
-        if (num == 0){
-        return linSpaceVec = {};
-    }
-    if (num == 1){
-        linSpaceVec.push_back(start);
-        return linSpaceVec;
-    }
-    for (int i = 0; i < num - 1; ++i){
-        linSpaceVec.push_back(start + delta * i);        
-    }
-    linSpaceVec.push_back(end);                                     // add last element
-    return linSpaceVec;
 }
 
 void Diffusion::initConditions(){
