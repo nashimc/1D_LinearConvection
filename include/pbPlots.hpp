@@ -1,3 +1,4 @@
+// EXTERNAL
 // Downloaded from https://repo.progsbase.com - Code Developed Using progsbase.
 
 #include <cmath>

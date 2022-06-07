@@ -1,8 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "../include/pbPlots.hpp"
-#include "../include/supportLib.hpp"
+#include "../include/pbPlots.hpp"               // EXTERNAL
+#include "../include/supportLib.hpp"            // EXTERNAL
 #include "../include/ArrayType.hpp"
 #include "../include/LinearConvection.hpp"
 #include "../include/Diffusion.hpp"
