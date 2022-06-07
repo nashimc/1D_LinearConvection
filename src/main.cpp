@@ -30,7 +30,7 @@ int main(){
     double numberOfXPoints = 21;
     double yDimension = 5;
     double numberOfYPoints = 21;
-    int timeSteps = 10;   
+    int timeSteps = 100;   
     double deltaTime = 0.005;
     float lc_constant = 1;
     float diff_nu = 0.3;

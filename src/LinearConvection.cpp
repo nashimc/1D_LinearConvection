@@ -29,9 +29,10 @@ LinearConvection::~LinearConvection(){
 }
 
 // initialise arrays
-void LinearConvection::init(){                                      
-    if (_oneD == true){
-        _xArray = _linSpaced.getLinSpace(0,_xDimension, _xPoints);
+void LinearConvection::init(){  
+    LinSpace linSpaced;                                     
+    if (_oneD == true){        
+        _xArray = linSpaced.getLinSpace(0,_xDimension, _xPoints);
 
         _uArray.resize(_xPoints);                                   // resize arrays
         _uArray_new.resize(_xPoints);                                 
@@ -41,8 +42,8 @@ void LinearConvection::init(){
         _uArray[_xPoints-1] = 0;        
     }
     if (_twoD == true){
-        _xArray = _linSpaced.getLinSpace(0, _xDimension, _xPoints);
-        _yArray = _linSpaced.getLinSpace(0, _yDimension, _yPoints);
+        _xArray = linSpaced.getLinSpace(0, _xDimension, _xPoints);
+        _yArray = linSpaced.getLinSpace(0, _yDimension, _yPoints);
 
         _uArray.resize(_xPoints);                                   // resize arrays
         std::fill(std::begin(_uArray), std::end(_uArray), 1);       // fill u with 1

@@ -29,8 +29,6 @@ public:
     std::vector<std::vector<double>> _iterSolution1D;
     std::vector<std::vector<std::vector<double>>> _iterSolution2D;
 
-    LinSpace _linSpaced;
-
     // ArrayType _solutionArray;
 
 public:

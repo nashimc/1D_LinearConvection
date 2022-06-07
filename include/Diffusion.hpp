@@ -11,11 +11,9 @@ public:
     bool _twoD = false;
 
     float _nu;
-    double _xDimension;
-    int _xPoints;
+    double _xDimension, _yDimension;
+    int _xPoints, _yPoints;
     double _deltaX = _xDimension / (_xPoints - 1);
-    double _yDimension;
-    int _yPoints;
     double _deltaY = _yDimension / (_yPoints - 1);
 
     double _timeSteps;
@@ -30,8 +28,7 @@ public:
 
     std::vector<std::vector<double>> _iterSolution1D;
     std::vector<std::vector<std::vector<double>>> _iterSolution2D;
-
-    LinSpace _linSpaced;
+  
 
 public:
     Diffusion(const double xDimension, const int xPoints, const double timeSteps, const double deltaTime, const float nu);
