@@ -6,7 +6,7 @@
 #include "../include/ArrayType.hpp"
 #include "../include/LinearConvection.hpp"
 #include "../include/Diffusion.hpp"
-
+#include "../include/NonLinearConvection.hpp"
 
 void writeToFile(std::string const fileName, std::vector<std::vector<std::vector<double>>> &matrix){
     std::ofstream file;   
@@ -30,29 +30,37 @@ int main(){
     double numberOfXPoints = 21;
     double yDimension = 5;
     double numberOfYPoints = 21;
-    int timeSteps = 100;   
+    int timeSteps = 10;   
     double deltaTime = 0.005;
     float lc_constant = 1;
     float diff_nu = 0.3;
+    float nlc_velocity = 2;
 
     LinearConvection twoD_LC(xDimension, numberOfXPoints, yDimension, numberOfYPoints, timeSteps, deltaTime, lc_constant);
     Diffusion twoD_Diff(xDimension, numberOfXPoints, yDimension, numberOfYPoints, timeSteps, deltaTime, diff_nu);
-
+    NonLinearConvection twoD_NLC(xDimension, numberOfXPoints, yDimension, numberOfYPoints, timeSteps, deltaTime, nlc_velocity);
+    
     std::cout << "LinConv Result: \n";
     twoD_LC.Solve();
     twoD_LC.printSolution();
+    std::vector<std::vector<std::vector<double>>> iterSolution2D_LC = twoD_LC.getIterSolution2D();
+    writeToFile("LinConvResults.csv", iterSolution2D_LC);
 
     std::cout << "\n";
 
     std::cout << "Diff Result: \n";
     twoD_Diff.Solve();
     twoD_Diff.printSolution();
-
-    std::vector<std::vector<std::vector<double>>> iterSolution2D_LC = twoD_LC.getIterSolution2D();
-    writeToFile("LinConvResults.csv", iterSolution2D_LC);
-
     std::vector<std::vector<std::vector<double>>> iterSolution2D_Diff = twoD_Diff.getIterSolution2D();
-    writeToFile("DiffResults.csv", iterSolution2D_Diff); 
+    writeToFile("DiffResults.csv", iterSolution2D_Diff);
+
+    std::cout << "\n";
+
+    std::cout << "NonLinConv Result: \n";
+    twoD_NLC.Solve();
+    twoD_NLC.printSolution();
+    std::vector<std::vector<std::vector<double>>> iterSolution2D_NLC = twoD_NLC.getIterSolution2D();
+    writeToFile("NonLinConvResults.csv", iterSolution2D_NLC); 
 
 
 

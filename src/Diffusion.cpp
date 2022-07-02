@@ -88,16 +88,16 @@ void Diffusion::Run(){
         }
     }
     if (_twoD == true){
-        for (int t = 0; t < _timeSteps; ++t){
+        for (int t = 0; t < _timeSteps + 1; ++t){
             for (int i = 1; i < _uvArray.size() - 1; ++i){    
                 for (int j = 1; j < _uvArray[i].size() - 1; ++j){
                     _uvArray_new[i][j] = _uvArray[i][j] - _nu * (_deltaTime / pow(_deltaX, 2)) * (_uvArray[i+1][j] - 2*_uvArray[i][j] + _uvArray[i-1][j])
                                                         - _nu * (_deltaTime / pow(_deltaY, 2)) * (_uvArray[i][j+1] - 2*_uvArray[i][j] + _uvArray[i][j-1]); 
-                    // // Boundary Conditions
-                    // _uvArray_new[0][j-1] = 3;                       // ---top--
-                    // _uvArray_new[i][0] = 4;                         // |  le
-                    // _uvArray_new[_uvArray.size()-1][j] = 5;         // --bot---
-                    // _uvArray_new[i-1][_uvArray[i].size()-1] = 6;    //    ri  |
+                    // Boundary Conditions
+                    _uvArray_new[0][j] = 1;                       // ---top--
+                    _uvArray_new[i][0] = 1;                         // |  le
+                    _uvArray_new[_uvArray.size()-1][j] = 1;         // --bot---
+                    _uvArray_new[i-1][_uvArray[i].size()-1] = 1;    //    ri  |
                 }
             }
             _iterSolution2D.push_back(_uvArray_new);                // save iterative solution for all timesteps

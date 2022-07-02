@@ -5,12 +5,12 @@
 #include "ArrayType.hpp"
 #include "LinSpace.hpp"
 
-class LinearConvection{
+class NonLinearConvection{
 public:
     bool _oneD = false;
     bool _twoD = false;
 
-    float _constant;
+    float _velocity;
     double _xDimension, _yDimension;
     int _xPoints, _yPoints;
     double _deltaX = _xDimension / (_xPoints - 1);
@@ -33,13 +33,13 @@ public:
     // ArrayType _solutionArray;
 
 public:
-    LinearConvection(const double xDimension, const int xPoints, const double timeSteps, const double deltaTime, float constant);
-    LinearConvection(const double xDimension, const int xPoints, const double yDimension, const int yPoints, const double timeSteps, const double deltaTime,  float constant);
+    NonLinearConvection(const double xDimension, const int xPoints, const double timeSteps, const double deltaTime, float velocity);
+    NonLinearConvection(const double xDimension, const int xPoints, const double yDimension, const int yPoints, const double timeSteps, const double deltaTime,  float velocity);
     
     void init();
     std::vector<double> linSpace(const double start, const double end, const double num);
     void initConditions();
-    void boundaryConditions();
+    void hatFunction();
     void Run();
     void Solve();
     void printSolution();
@@ -49,5 +49,5 @@ public:
     std::vector<std::vector<double>> getIterSolution1D();
     std::vector<std::vector<std::vector<double>>> getIterSolution2D();
 
-    ~LinearConvection();
+    ~NonLinearConvection();
 };

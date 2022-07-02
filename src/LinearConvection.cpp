@@ -1,3 +1,4 @@
+
 #include "../include/LinearConvection.hpp"
 
 LinearConvection::LinearConvection(const double xDimension, const int xPoints, const double timeSteps, const double deltaTime, float constant):
@@ -92,11 +93,30 @@ void LinearConvection::initConditions(){
     }
 }
 
+// Wall boundary conditions - not used. To be implemented another time in different class
+void LinearConvection::boundaryConditions(){
+    if (_oneD == true){}
+    if (_twoD == true){
+        for (int i = 0; i < _uvArray.size(); ++i){   
+            for (int j = 0; j < _uvArray[i].size(); ++j){
+                _uvArray_new[0][j] = 1;                       // ---top---
+                _uvArray_new[i][0] = 1;                       // |  le
+                _uvArray_new[_uvArray.size()][j] = 1;         // ---bot---
+                _uvArray_new[i][_uvArray[i].size()] = 1;      //    ri   |
+            }
+        }   
+    }
+}
+
+/*
+Forward differencing in Time and Backward differencing in Space.
+For 1D, the convection depends on the cell to the left of the current cell.
+For 2D, the convection depends on the cell above and to the left of the current cell
+*/
 void LinearConvection::Run(){
     if (_oneD == true){        
         for (int t = 0; t < _timeSteps; ++t){
-            for (int i = 0; i < _xPoints; ++i)
-            {
+            for (int i = 0; i < _xPoints; ++i){
                 _uArray_new[i] = _uArray[i] - _constant 
                                             * (_deltaTime / _deltaX) * (_uArray[i] - _uArray[i-1]);
             }
@@ -105,44 +125,46 @@ void LinearConvection::Run(){
         }
     }
     if (_twoD == true){
-        for (int t = 0; t < _timeSteps; ++t){
+        for (int t = 0; t < _timeSteps +1; ++t){
             for (int i = 1; i < _uvArray.size(); ++i){   
                 for (int j = 1; j < _uvArray[i].size(); ++j){
                     _uvArray_new[i][j] = _uvArray[i][j] - _constant 
                                                         * (_deltaTime / _deltaX) * (_uvArray[i][j] - _uvArray[i-1][j])
                                                         - _constant 
-                                                        * (_deltaTime / _deltaY) * (_uvArray[i][j] - _uvArray[i][j-1]); 
-                    // Boundary Conditions - fills in BC with shift
-                    _uvArray_new[0][j-1] = 1;                       // ---top--
+                                                        * (_deltaTime / _deltaY) * (_uvArray[i][j] - _uvArray[i][j-1]);
+                                                       
+                    _uvArray_new[0][j-1] = 1;                       // --top--|
                     _uvArray_new[i][0] = 1;                         // |  le
-                    _uvArray_new[_uvArray.size()-1][j] = 1;         // --bot---
-                    _uvArray_new[i-1][_uvArray[i].size()-1] = 1;    //    ri  |
+                    _uvArray_new[_uvArray.size()-1][j] = 1;         // |--bot---
+                    _uvArray_new[i-1][_uvArray[i].size()-1] = 1;    //    ri   |
                 }
             }
             _iterSolution2D.push_back(_uvArray_new);                // save iterative solution for all timesteps
             _uvArray = _uvArray_new;       
         }
 
-        // // alternative way to loop through matrix, loops through inner points, then applies BC - 4 sides + 4 corners
-        // for (int t = 0; t < _timeSteps; ++t){
-        //     for (int i = 1; i < _uvArray.size() - 1; ++i){
-        //         for (int j = 1; j < _uvArray[i].size() - 1; ++j){
-        //             _uvArray_new[i][j] = _uvArray[i][j] - _constant * (_deltaTime / _deltaX) * (_uvArray[i][j] - _uvArray[i-1][j])
-        //                                                 - _constant * (_deltaTime / _deltaY) * (_uvArray[i][j] - _uvArray[i][j-1]);
-        //             // Boundary Conditions
-        //             _uvArray_new[0][j] = 1;                                     // ---top--
-        //             _uvArray_new[i][0] = 1;                                     // |  le
-        //             _uvArray_new[_uvArray.size()-1][j] = 1;                     // --bot---
-        //             _uvArray_new[i][_uvArray[i].size()-1] = 1;                  //    ri  |
-        //             _uvArray_new[0][0] = 1;                                     // top le corner
-        //             _uvArray_new[_uvArray.size()-1][0] = 1;                     // bot le corner
-        //             _uvArray_new[_uvArray.size()-1][_uvArray[i].size()-1] = 1;  // bot ri corner
-        //             _uvArray_new[0][_uvArray[i].size()-1] = 1;                  // top ri corner
-        //         }
-        //     }
-        //     _iterSolution2D.push_back(_uvArray_new);                // save iterative solution for all timesteps
-        //     _uvArray = _uvArray_new;       
-        // }
+        /*
+        // alternative way to loop through matrix, loops through inner points, then applies BC - 4 sides + 4 corners
+        for (int t = 0; t < _timeSteps; ++t){
+            for (int i = 1; i < _uvArray.size() - 1; ++i){
+                for (int j = 1; j < _uvArray[i].size() - 1; ++j){
+                    _uvArray_new[i][j] = _uvArray[i][j] - _constant * (_deltaTime / _deltaX) * (_uvArray[i][j] - _uvArray[i-1][j])
+                                                        - _constant * (_deltaTime / _deltaY) * (_uvArray[i][j] - _uvArray[i][j-1]);
+                    // Boundary Conditions
+                    _uvArray_new[0][j] = 1;                                     // ---top--
+                    _uvArray_new[i][0] = 1;                                     // |  le
+                    _uvArray_new[_uvArray.size()-1][j] = 1;                     // --bot---
+                    _uvArray_new[i][_uvArray[i].size()-1] = 1;                  //    ri  |
+                    _uvArray_new[0][0] = 1;                                     // top le corner
+                    _uvArray_new[_uvArray.size()-1][0] = 1;                     // bot le corner
+                    _uvArray_new[_uvArray.size()-1][_uvArray[i].size()-1] = 1;  // bot ri corner
+                    _uvArray_new[0][_uvArray[i].size()-1] = 1;                  // top ri corner
+                }
+            }
+            _iterSolution2D.push_back(_uvArray_new);                // save iterative solution for all timesteps
+            _uvArray = _uvArray_new;       
+        }
+        */
     }
 
 }
