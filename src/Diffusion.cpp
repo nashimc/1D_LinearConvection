@@ -1,138 +1,63 @@
 #include "../include/Diffusion.hpp"
 
+Diffusion::Diffusion(){}
 
-Diffusion::Diffusion(const double xDimension, const int xPoints, const double timeSteps, const double deltaTime, const float nu):
-_xDimension{xDimension},
-_xPoints{xPoints},
-_timeSteps{timeSteps},
-_deltaTime{deltaTime},
-_nu{nu}
-{
-    _oneD = true;
-    init();
+Diffusion::Diffusion(double x, int xp, double t, double dt, float c){
+    x_dimension = x;
+    x_points = xp;
+    time_steps = t;
+    delta_time = dt;
+    constant = c;
+    one_dim = true;
 }
 
-Diffusion::Diffusion(const double xDimension, const int xPoints, const double yDimension, const int yPoints, const double timeSteps, const double deltaTime, const float nu):
-_xDimension{xDimension},
-_xPoints{xPoints},
-_yDimension{yDimension},
-_yPoints{yPoints},
-_timeSteps{timeSteps},
-_deltaTime{deltaTime},
-_nu{nu}
-{
-    _twoD = true;
-    init();      
+Diffusion::Diffusion(double x, int xp, double y, int yp, double t, double dt, float c){
+    x_dimension = x;
+    x_points = xp;
+    y_dimension = y;
+    y_points = yp;
+    time_steps = t;
+    delta_time = dt;
+    constant = c;
+    two_dim = true;       
 }
 
-Diffusion::~Diffusion(){
+Diffusion::~Diffusion(){}
 
-}
-
-// initialise arrays
-void Diffusion::init(){
-    LinSpace linSpaced;                                      
-    if (_oneD == true){
-        _xArray = linSpaced.getLinSpace(0,_xDimension, _xPoints);
-
-        _uArray.resize(_xPoints);                                   // resize arrays
-        _uArray_new.resize(_xPoints);                                 
-        std::fill(std::begin(_uArray), std::end(_uArray), 1);       // fill arrays to 1
-        _uArray_new = _uArray;                                      // copy to new
-        _uArray[0] = 0;                                             
-        _uArray[_xPoints-1] = 0;        
-    }
-    if (_twoD == true){
-        _xArray = linSpaced.getLinSpace(0, _xDimension, _xPoints);
-        _yArray = linSpaced.getLinSpace(0, _yDimension, _yPoints);
-
-        _uArray.resize(_xPoints);                                   // resize arrays
-        std::fill(std::begin(_uArray), std::end(_uArray), 1);       // fill u with 1
-        for (int i = 0; i < (_yPoints); ++i){                       // push u yPoints times to produce 2D array
-            _uvArray.push_back(_uArray);                            
-        }
-        _uvArray_new = _uvArray;                                    // copy to new
-    }
-}
-
-void Diffusion::initConditions(){
-    if (_oneD == true){
-        for (int i = 0; i < _xArray.size(); ++i){    
-            if (_xArray[i] >= 0.5 && _xArray[i] <= 1.0){
-                _uArray[i] = 2;
-            }
-        }
-    }
-    if (_twoD == true){
-        for (int i = 0; i < _uvArray.size(); ++i){                  // for uv matrix, check linspace arrays and adjust index
-            for (int j = 0; j < _uvArray[i].size(); ++j){
-                if (_xArray[i] > 0.5 && _xArray[i] < 1){
-                    if (_yArray[j] > 0.5 && _yArray[j] < 1){
-                        _uvArray[i][j] = 2;                         // initial velocity
-                    }
-                }
-            }    
-        }
-    }
-}
-
-void Diffusion::Run(){
-    if (_oneD == true){        
-        for (int t = 0; t < _timeSteps; ++t){
-            for (int i = 1; i < _xPoints - 1; ++i)
+/*
+Forward differencing in Time and Backward differencing in Space.
+For 1D, the convection depends on the cell to the left of the current cell.
+For 2D, the convection depends on the cell above and to the left of the current cell
+*/
+void Diffusion::run(){
+    init_arrays();
+    init_conditions();
+    if (one_dim == true){        
+        for (int t = 0; t < time_steps; ++t){
+            for (int i = 1; i < x_points - 1; ++i)
             {
-                _uArray_new[i] = _uArray[i] - _nu * (_deltaTime / pow(_deltaX, 2)) * (_uArray[i+1] - 2*_uArray[i] + _uArray[i-1]);
+                u_array_new[i] = u_array[i] - constant * (delta_time / pow(delta_x, 2)) * (u_array[i+1] - 2*u_array[i] + u_array[i-1]);
             }
-            _iterSolution1D.push_back(_uArray_new);                 // save iterative solution for all timesteps
-            _uArray = _uArray_new;
+            timestep_solutions_1D.push_back(u_array_new);                 // save iterative solution for all timesteps
+            u_array = u_array_new;
         }
     }
-    if (_twoD == true){
-        for (int t = 0; t < _timeSteps + 1; ++t){
-            for (int i = 1; i < _uvArray.size() - 1; ++i){    
-                for (int j = 1; j < _uvArray[i].size() - 1; ++j){
-                    _uvArray_new[i][j] = _uvArray[i][j] - _nu * (_deltaTime / pow(_deltaX, 2)) * (_uvArray[i+1][j] - 2*_uvArray[i][j] + _uvArray[i-1][j])
-                                                        - _nu * (_deltaTime / pow(_deltaY, 2)) * (_uvArray[i][j+1] - 2*_uvArray[i][j] + _uvArray[i][j-1]); 
+    if (two_dim == true){
+        for (int t = 0; t < time_steps + 1; ++t){
+            for (int i = 1; i < uv_array.size() - 1; ++i){    
+                for (int j = 1; j < uv_array[i].size() - 1; ++j){
+                    uv_array_new[i][j] = uv_array[i][j] - constant * (delta_time / pow(delta_x, 2)) * (uv_array[i+1][j] - 2*uv_array[i][j] + uv_array[i-1][j])
+                                                        - constant * (delta_time / pow(delta_y, 2)) * (uv_array[i][j+1] - 2*uv_array[i][j] + uv_array[i][j-1]); 
                     // Boundary Conditions
-                    _uvArray_new[0][j] = 1;                       // ---top--
-                    _uvArray_new[i][0] = 1;                         // |  le
-                    _uvArray_new[_uvArray.size()-1][j] = 1;         // --bot---
-                    _uvArray_new[i-1][_uvArray[i].size()-1] = 1;    //    ri  |
+                    uv_array_new[0][j] = 1;                       // ---top--
+                    uv_array_new[i][0] = 1;                         // |  le
+                    uv_array_new[uv_array.size()-1][j] = 1;         // --bot---
+                    uv_array_new[i-1][uv_array[i].size()-1] = 1;    //    ri  |
                 }
             }
-            _iterSolution2D.push_back(_uvArray_new);                // save iterative solution for all timesteps
-            _uvArray = _uvArray_new;       
+            timestep_solutions_2D.push_back(uv_array_new);                // save iterative solution for all timesteps
+            uv_array = uv_array_new;       
         }
     }
 
 }
-
-void Diffusion::Solve(){
-    initConditions();
-    Run();
-}
-
-void Diffusion::printSolution(){
-    if (_oneD == true){
-        for (int i = 0; i < _uArray.size(); ++i){
-                std::cout << _uArray[i] << std::endl;
-            }
-    }
-    if (_twoD == true){
-        for (int i = 0; i < _uvArray.size(); ++i){
-            for (auto it = _uvArray[i].begin(); it != _uvArray[i].end(); it++){	
-                std::cout << *it;
-		    }
-		    std::cout << "\n";
-	    }
-    }
-}
-
-std::vector<double> Diffusion::getSolution1D(){return _uArray;}
-
-std::vector<std::vector<double>> Diffusion::getSolution2D(){return _uvArray;}
-
-std::vector<std::vector<double>> Diffusion::getIterSolution1D(){return _iterSolution1D;}
-    
-std::vector<std::vector<std::vector<double>>> Diffusion::getIterSolution2D(){return _iterSolution2D;}
-

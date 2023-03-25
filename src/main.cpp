@@ -3,10 +3,10 @@
 #include <string>
 #include "../include/pbPlots.hpp"               // EXTERNAL
 #include "../include/supportLib.hpp"            // EXTERNAL
-#include "../include/ArrayType.hpp"
 #include "../include/LinearConvection.hpp"
 #include "../include/Diffusion.hpp"
 #include "../include/NonLinearConvection.hpp"
+
 
 void writeToFile(std::string const fileName, std::vector<std::vector<std::vector<double>>> &matrix){
     std::ofstream file;   
@@ -18,7 +18,7 @@ void writeToFile(std::string const fileName, std::vector<std::vector<std::vector
 				file << matrix[t][y][x] << ",";
 			}	
 			file << "\n" << ",";
-		}
+        }
 		file << "\n";
 	}
 }
@@ -26,94 +26,39 @@ void writeToFile(std::string const fileName, std::vector<std::vector<std::vector
 
 int main(){
 
-    double xDimension = 5;
-    double numberOfXPoints = 21;
-    double yDimension = 5;
-    double numberOfYPoints = 21;
-    int timeSteps = 10;   
-    double deltaTime = 0.005;
+    double x_dimension = 5;
+    double x_points = 21;
+    double y_dimension = 5;
+    double y_points = 21;
+    int time_steps = 50;   
+    double delta_time = 0.1;
     float lc_constant = 1;
     float diff_nu = 0.3;
     float nlc_velocity = 2;
 
-    LinearConvection twoD_LC(xDimension, numberOfXPoints, yDimension, numberOfYPoints, timeSteps, deltaTime, lc_constant);
-    Diffusion twoD_Diff(xDimension, numberOfXPoints, yDimension, numberOfYPoints, timeSteps, deltaTime, diff_nu);
-    NonLinearConvection twoD_NLC(xDimension, numberOfXPoints, yDimension, numberOfYPoints, timeSteps, deltaTime, nlc_velocity);
+    LinearConvection lin_conv(x_dimension, x_points, y_dimension, y_points, time_steps, delta_time, lc_constant);
+    std::cout << "LinConv Result: \n";  
+    lin_conv.run();
+    lin_conv.print_solution();
+    std::vector<std::vector<std::vector<double>>> lc_timestep_solutions = lin_conv.get_timestep_solutions_2D();
+    writeToFile("LinConvResults.csv", lc_timestep_solutions);
+    std::cout << "\n";
+
+    Diffusion diff(x_dimension, x_points, y_dimension, y_points, time_steps, delta_time, diff_nu);
+    std::cout << "Diff Result: \n";  
+    diff.run();
+    diff.print_solution();
+    std::vector<std::vector<std::vector<double>>> diff_timestep_solutions = diff.get_timestep_solutions_2D();
+    writeToFile("DiffResults.csv", diff_timestep_solutions);
+    std::cout << "\n";
+
+    NonLinearConvection non_lin_conv(x_dimension, x_points, y_dimension, y_points, time_steps, delta_time, nlc_velocity);
+    std::cout << "NonLinConv Result: \n";  
+    non_lin_conv.run();
+    non_lin_conv.print_solution();
+    std::vector<std::vector<std::vector<double>>> nlc_timestep_solutions = non_lin_conv.get_timestep_solutions_2D();
+    writeToFile("NonLinConvResults.csv", nlc_timestep_solutions);
+    std::cout << "\n";
     
-    std::cout << "LinConv Result: \n";
-    twoD_LC.Solve();
-    twoD_LC.printSolution();
-    std::vector<std::vector<std::vector<double>>> iterSolution2D_LC = twoD_LC.getIterSolution2D();
-    writeToFile("LinConvResults.csv", iterSolution2D_LC);
 
-    std::cout << "\n";
-
-    std::cout << "Diff Result: \n";
-    twoD_Diff.Solve();
-    twoD_Diff.printSolution();
-    std::vector<std::vector<std::vector<double>>> iterSolution2D_Diff = twoD_Diff.getIterSolution2D();
-    writeToFile("DiffResults.csv", iterSolution2D_Diff);
-
-    std::cout << "\n";
-
-    std::cout << "NonLinConv Result: \n";
-    twoD_NLC.Solve();
-    twoD_NLC.printSolution();
-    std::vector<std::vector<std::vector<double>>> iterSolution2D_NLC = twoD_NLC.getIterSolution2D();
-    writeToFile("NonLinConvResults.csv", iterSolution2D_NLC); 
-
-
-
-
-
-
-
-
-    // // 1D Check
-    // for (auto it = oneD._xArray.begin(); it != oneD._xArray.end(); it++){
-    //     std::cout << *it << " ";
-    // }
-	// std::cout << "\n";
-    // // 2D Check
-    // for (int i = 0; i < twoD._uvArray.size(); ++i){
-	// 	for (auto it = twoD._uvArray[i].begin(); it != twoD._uvArray[i].end(); it++){	
-	// 			std::cout << *it;
-	// 	}
-	// 	std::cout << "\n";
-	// }
-
-    // // get 2d iter print
-    // for (auto t = 0; t < iterSolution2D.size(); ++t){
-    //     std::cout << t << ",\t\t";
-	// 	for (auto y = 0; y < iterSolution2D[t].size(); ++y){
-	// 		for (auto x = 0; x < iterSolution2D[t][y].size(); ++x){
-	// 			std::cout << iterSolution2D[t][y][x] << ",\t\t";
-	// 		}	
-	// 		std::cout << "\n";
-	// 	}
-	// 	std::cout << "\n";
-	// }
-
-    // // plot to graph
-    // std::vector<double> x;
-    // double n = 0;
-    // for (int i = 0; i < numberOfPoints; ++i){
-    //     x.push_back(n);     
-    //     ++n;
-    // }
-    // std::vector<double> y = oneD.getSolution();
-
-
-    // if (x.size() == y.size()){
-    //     RGBABitmapImageReference *imageRef = CreateRGBABitmapImageReference();
-    //     StringReference *errorMessage = new StringReference();
-    //     DrawScatterPlot(imageRef, 600, 400, &x, &y, errorMessage);
-    //     std::vector<double> *pngData = ConvertToPNG(imageRef->image);
-    //     WriteToFile(pngData, "plot.png");
-    //     DeleteImage(imageRef->image);
-    //     delete errorMessage;
-    // }
-
-    // return 0;
 }
-
