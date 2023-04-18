@@ -6,6 +6,7 @@
 #include "../include/LinearConvection.hpp"
 #include "../include/Diffusion.hpp"
 #include "../include/NonLinearConvection.hpp"
+#include "../include/Burger.hpp"
 
 
 void writeToFile(std::string const fileName, std::vector<std::vector<std::vector<double>>> &matrix){
@@ -36,29 +37,39 @@ int main(){
     float diff_nu = 0.3;
     float nlc_velocity = 2;
 
-    LinearConvection lin_conv(x_dimension, x_points, y_dimension, y_points, time_steps, delta_time, lc_constant);
-    std::cout << "LinConv Result: \n";  
-    lin_conv.run();
-    lin_conv.print_solution();
-    std::vector<std::vector<std::vector<double>>> lc_timestep_solutions = lin_conv.get_timestep_solutions_2D();
-    writeToFile("LinConvResults.csv", lc_timestep_solutions);
-    std::cout << "\n";
+    // LinearConvection lin_conv(x_dimension, x_points, y_dimension, y_points, time_steps, delta_time, lc_constant);
+    // std::cout << "LinConv Result: \n";  
+    // lin_conv.run();
+    // lin_conv.print_solution();
+    // std::vector<std::vector<std::vector<double>>> lc_timestep_solutions = lin_conv.get_uv_timestep_solutions_2D();
+    // writeToFile("LinConvResults.csv", lc_timestep_solutions);
+    // std::cout << "\n";
 
-    Diffusion diff(x_dimension, x_points, y_dimension, y_points, time_steps, delta_time, diff_nu);
-    std::cout << "Diff Result: \n";  
-    diff.run();
-    diff.print_solution();
-    std::vector<std::vector<std::vector<double>>> diff_timestep_solutions = diff.get_timestep_solutions_2D();
-    writeToFile("DiffResults.csv", diff_timestep_solutions);
-    std::cout << "\n";
+    // Diffusion diff(x_dimension, x_points, y_dimension, y_points, time_steps, delta_time, diff_nu);
+    // std::cout << "Diff Result: \n";  
+    // diff.run();
+    // diff.print_solution();
+    // std::vector<std::vector<std::vector<double>>> diff_timestep_solutions = diff.get_uv_timestep_solutions_2D();
+    // writeToFile("DiffResults.csv", diff_timestep_solutions);
+    // std::cout << "\n";
 
-    NonLinearConvection non_lin_conv(x_dimension, x_points, y_dimension, y_points, time_steps, delta_time, nlc_velocity);
+    // NonLinearConvection non_lin_conv(x_dimension, x_points, y_dimension, y_points, time_steps, delta_time, nlc_velocity);
+    // std::cout << "NonLinConv Result: \n";  
+    // non_lin_conv.run();
+    // non_lin_conv.print_solution();
+    // std::vector<std::vector<std::vector<double>>> nlc_uv_timestep_solutions = non_lin_conv.get_uv_timestep_solutions_2D();
+    // writeToFile("NonLinConvResultsUV.csv", nlc_uv_timestep_solutions);
+    // std::vector<std::vector<std::vector<double>>> nlc_vv_timestep_solutions = non_lin_conv.get_vv_timestep_solutions_2D();
+    // writeToFile("NonLinConvResultsVV.csv", nlc_vv_timestep_solutions);
+    // std::cout << "\n";
+
+    Burger burg(x_dimension, x_points, y_dimension, y_points, time_steps, delta_time, nlc_velocity);
     std::cout << "NonLinConv Result: \n";  
-    non_lin_conv.run();
-    non_lin_conv.print_solution();
-    std::vector<std::vector<std::vector<double>>> nlc_timestep_solutions = non_lin_conv.get_timestep_solutions_2D();
-    writeToFile("NonLinConvResults.csv", nlc_timestep_solutions);
+    burg.run();
+    burg.print_solution();
+    std::vector<std::vector<std::vector<double>>> burg_uv_timestep_solutions = burg.get_uv_timestep_solutions_2D();
+    writeToFile("BurgResultsUV.csv", burg_uv_timestep_solutions);
+    std::vector<std::vector<std::vector<double>>> burg_vv_timestep_solutions = burg.get_vv_timestep_solutions_2D();
+    writeToFile("BurgResultsVV.csv", burg_vv_timestep_solutions);
     std::cout << "\n";
-    
-
 }

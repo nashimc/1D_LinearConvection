@@ -57,7 +57,7 @@ void LinearConvection::run(){
                     uv_array_new[i-1][uv_array[i].size()-1] = 1;    //    ri   |
                 }
             }
-            timestep_solutions_2D.push_back(uv_array_new);               
+            uv_timestep_solutions_2D.push_back(uv_array_new);               
             uv_array = uv_array_new;       
         }
 

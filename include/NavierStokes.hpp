@@ -29,7 +29,8 @@ public:
     std::vector<std::vector<double>> vv_array_new;
 
     std::vector<std::vector<double>> timestep_solutions_1D;
-    std::vector<std::vector<std::vector<double>>> timestep_solutions_2D;
+    std::vector<std::vector<std::vector<double>>> uv_timestep_solutions_2D;
+    std::vector<std::vector<std::vector<double>>> vv_timestep_solutions_2D;
 
 public:
     NavierStokes();
@@ -37,11 +38,13 @@ public:
     void init_arrays();
     void init_conditions();    
     void boundary_conditions();
-    void print_solution();
-    std::vector<std::vector<double>> get_timestep_solutions_1D(){return timestep_solutions_1D;}    
-    std::vector<std::vector<std::vector<double>>> get_timestep_solutions_2D(){return timestep_solutions_2D;}
-    std::vector<double> get_final_solution_1D(){return u_array;}
-    std::vector<std::vector<double>> get_final_solution_2D(){return uv_array;}
+    virtual void print_solution();
+    std::vector<std::vector<double>> get_timestep_solutions_1D() const {return timestep_solutions_1D;}    
+    std::vector<std::vector<std::vector<double>>> get_uv_timestep_solutions_2D() const {return uv_timestep_solutions_2D;}
+    std::vector<std::vector<std::vector<double>>> get_vv_timestep_solutions_2D() const {return vv_timestep_solutions_2D;}
+    std::vector<double> get_final_solution_1D() const {return u_array;}
+    std::vector<std::vector<double>> get_uu_final_solution_2D() const {return uv_array;}
+    std::vector<std::vector<double>> get_vv_final_solution_2D() const {return vv_array;}
 
     ~NavierStokes();
 };

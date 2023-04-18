@@ -1,8 +1,8 @@
-#include "../include/NonLinearConvection.hpp"
+#include "../include/Burger.hpp"
 
-NonLinearConvection::NonLinearConvection(){}
+Burger::Burger(){}
 
-NonLinearConvection::NonLinearConvection(double x, int xp, double t, double dt, float c){
+Burger::Burger(double x, int xp, double t, double dt, float c){
     x_dimension = x;
     x_points = xp;
     time_steps = t;
@@ -11,7 +11,7 @@ NonLinearConvection::NonLinearConvection(double x, int xp, double t, double dt, 
     one_dim = true;
 }
 
-NonLinearConvection::NonLinearConvection(double x, int xp, double y, int yp, double t, double dt, float c){
+Burger::Burger(double x, int xp, double y, int yp, double t, double dt, float c){
     x_dimension = x;
     x_points = xp;
     y_dimension = y;
@@ -22,20 +22,23 @@ NonLinearConvection::NonLinearConvection(double x, int xp, double y, int yp, dou
     two_dim = true;       
 }
 
-NonLinearConvection::~NonLinearConvection(){}
+Burger::~Burger(){}
 
 /*
 Forward differencing in Time and Backward differencing in Space.
 For 1D, the convection depends on the cell to the left of the current cell.
 For 2D, the convection depends on the cell above and to the left of the current cell
 */
-void NonLinearConvection::run()
+void Burger::run()
 {
     init_arrays();
     init_conditions();
     if (one_dim == true){}
     if (two_dim == true){
         vv_array = uv_array; 
+        // for (int t = 0; t < time_steps +1; ++t){
+        //     for (int i = 1; i < uv_array.size(); ++i){   
+        //         for (int j = 1; j < uv_array[i].size(); ++j){
         for (int i = 0; i < uv_array.size(); ++i){
             for (int j = 0; j < uv_array[i].size(); ++j){
                 if (x_array[i] > 0.5 && x_array[i] < 1.0){
@@ -74,7 +77,7 @@ void NonLinearConvection::run()
     }
 }
 
-void NonLinearConvection::print_solution(){
+void Burger::print_solution(){
     if (one_dim == true){
         for (int i = 0; i < u_array.size(); ++i){
                 std::cout << u_array[i] << std::endl;

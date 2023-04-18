@@ -14,8 +14,8 @@ public:
     NonLinearConvection(double x, int xp, double t, double dt, float c);
     NonLinearConvection(double x, int xp, double y, int yp, double t, double dt, float c);
 
-    void hat_function();
     void run();
+    void print_solution();
 
     ~NonLinearConvection();
 };
